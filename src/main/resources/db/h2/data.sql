@@ -6,10 +6,6 @@ insert into member(email,name,password,phone,role) values('yusa2@naver.com',
 '유저2','$2a$10$vc.n7gsWnwwWt38bEh7wnuSSUQjNNGEOIWiEKP4XUGq2p1jD00pey',
 '010-111-111','USER');
 
-insert into member(email,name,password,phone,role) values('tkwand111@gmail.com',
-'전현우','GOOGLE',
-'GOOGLE','GOOGLE');
-
 
 insert into member(email,name,password,phone,role) values('admin@gmail.com',
 '관리자1','$2a$10$vc.n7gsWnwwWt38bEh7wnuSSUQjNNGEOIWiEKP4XUGq2p1jD00pey',

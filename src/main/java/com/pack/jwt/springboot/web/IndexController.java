@@ -47,28 +47,13 @@ public class IndexController {
     @GetMapping("/")
     public String index(@LoginUser String user, Model model){
 
-        System.out.println("home--------------------------------");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication = " + authentication.getName());
-
-
-//        Member member2 = memberService.findMember(u);
-//        System.out.println("user.getClass().getName() = " + user.getClass().getName());
-//        System.out.println("member2.getRole() = " + member2.getRole().getKey().equals("ADMIN")); 이거쓰면된다.
-
         if(user!=null){
             Member member = memberService.findMember(user);
             model.addAttribute("member", member);
         }
-        else{
-            String u = jwtTokenProvider.getUserPk("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5dXNhMkBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNTk1MTY5NjY4LCJleHAiOjE1OTUxNzE0Njh9.f10gNOGKy8tABjEyGk-pwwMbdwWnRCVVlrLr_Ri4GeE");
-            System.out.println("u " + u );
-            Member member = memberService.findMember(u);
-            System.out.println("member2.getRole() = " + member.getRole().getKey().equals("ROLE_USER")); //이거쓰면된다
-            System.out.println("member2.getRole() = " + member.getRole().getKey());
-            System.out.println("\"여긴가?\" = " + "여긴가?");
-            model.addAttribute("member", member);
 
+        else{
+            model.addAttribute("member", user);
         }
 
         return "home";

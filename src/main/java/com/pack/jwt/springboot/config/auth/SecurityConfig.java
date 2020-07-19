@@ -47,8 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
-                .and()
                 .authorizeRequests()
                 .antMatchers("/", "/css/**", "/static/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile").permitAll()
                 .antMatchers("/api/v1/**").permitAll()
@@ -67,8 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .logoutRequestMatcher(new AntPathRequestMatcher("/all/logout"))
                 .logoutSuccessUrl("/")
                 .and()
-                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                           UsernamePasswordAuthenticationFilter.class)
                     .oauth2Login()
                         .userInfoEndpoint()
                             .userService(customOAuth2UserService);
