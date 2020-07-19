@@ -11,6 +11,12 @@ buildscript {
     }
 }
 
+
+
+//springBoot {
+//    mainClass = "com.jojoldu.book"
+//}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -24,6 +30,7 @@ repositories {
     mavenCentral()
     jcenter()
 }
+
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
