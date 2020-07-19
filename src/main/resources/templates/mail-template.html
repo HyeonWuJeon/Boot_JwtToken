@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/config :: configFragment"/>
+<body>
+<header th:replace="fragments/header :: headerFragment"></header>
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+
+            <form class="login100-form validate-form" action="/mails" method="post">
+
+                <span class="login100-form-title p-b-49">메일 전송</span>
+
+                <div class="form-group">
+                    <label th:for="address">회원메일</label>
+                    <input type="text" name="address" class="form-control"
+                           th:value="${email.email}" readonly required>
+                </div>
+                <div class="form-group">
+                    <label th:for="title">제목</label>
+                    <input type="text" name="title" class="form-control"
+                           placeholder="질문 사항을 입력해주세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="message">내용</label>
+                    <textarea type="text" name="message" class="form-control"
+                              style="width:100%; border:1; overflow:visible;text-overflow:ellipsis;" rows=10
+                              placeholder="내용을 입력해주세요" required></textarea>
+                </div>
+                <br>
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button type="submit"  class="login100-form-btn" >답변 발송</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="dropDownSelect1"></div>
+<footer th:replace="fragments/footer :: footerFragment"></footer>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>메일 발송</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>메일 발송</h1>-->
+
+<!--<form action="/mails" method="post">-->
+<!--    <input name="address" placeholder="이메일 주소"> <br>-->
+<!--    <input name="title" placeholder="제목"> <br>-->
+<!--    <textarea name="message" placeholder="메일 내용을 입력해주세요." cols="60" rows="20"></textarea>-->
+<!--    <button type="submit" >발송</button>-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

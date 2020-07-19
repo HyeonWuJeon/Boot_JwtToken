@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/config :: configFragment"/>
+<body>
+<header th:replace="fragments/header :: headerFragment"></header>
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <form class="login100-form validate-form" action="/mail">
+                <span class="login100-form-title p-b-49">질문정보</span>
+                            <input type="text" id="email" th:field="${post.member.email}" hidden="true">
+                <div class="form-group">
+                    <label th:for="name">번호</label>
+                    <input type="text" id="postid" th:field="${post.id}" class="form-control" readonly required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="type">카테고리</label>
+                    <select name="type" id="type" th:field="${post.type}" class="form-control">
+                        <option value="security">Security</option>
+                        <option value="thymeleaf">Thymeleaf</option>
+                        <option value="jpa">Jpa</option>
+                        <option value="mybatis">Mybatis</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="title">제목</label>
+                    <input type="text" id ="title"th:field="${post.title}" class="form-control"  required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="content">내용</label>
+                    <textarea type="text" id = "content" th:field="${post.content}" class="form-control" required></textarea>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <a th:href = "@{/api/admin/mail/{id}(id = ${post.member.id})}" sec:authorize="hasRole('ROLE_ADMIN')" class="login100-form-btn" role="button">답변하기</a>
+                    </div>
+                </div>
+                <br>
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <a class="login100-form-btn" th:href="'javascript:update()'" role="button">질문 수정</a>
+
+                    </div>
+                </div>
+                <br>
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <a class="login100-form-btn" th:href="'javascript:deletePost()'" role="button">질문 삭제</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="dropDownSelect1"></div>
+
+
+<!--===============================================================================================-->
+<script src="/../static/js/app/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="/../static/js/app/animsition.min.js"></script>
+<script th:inline="javascript">
+    function answer(){
+        let data = $("type").val();
+
+        $.ajax({
+            type: 'GET',
+            url: '/mail',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function() {
+            alert('정보수정 되었습니다!');
+            // window.location.href = "/" + id;
+        }).fail(function(request, status, error) {
+            alert(JSON.stringify(error));
+            // window.location.href = "/admin/member/settings/" + id;
+            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+        });
+    }
+    function update() {
+        console.log("넘어는가니?");
+        let data = {
+            title: $("#title").val(),
+            content: $("#content").val(),
+            type: $("#type").val()
+        };
+
+        console.log(data);
+
+        let id = $("#postid").val();
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/v1/posts/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function() {
+            alert('정보수정 되었습니다!');
+            // window.location.href = "/" + id;
+        }).fail(function(request, status, error) {
+            alert(JSON.stringify(error));
+            // window.location.href = "/admin/member/settings/" + id;
+            alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+        });
+    }
+
+    function deletePost() {
+        let id = $("#postid").val();
+
+        console.log("---------");
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/posts/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function() {
+            console.log(name);
+            alert('삭제 되었습니다.');
+            window.location.href = "/member/post/list";
+        }).fail(function (request,status,error) {
+            // alert(JSON.stringify(error));
+            window.location.href = "/";
+            alert("권한이 없습니다.");
+        });
+    }
+</script>
+<footer th:replace="fragments/footer :: footerFragment"></footer>
+</body>
+<style>
+    select {
+        width: 200px;
+        padding: .8em .5em;
+        border: 1px solid #999;
+        font-family: inherit;
+        border-radius: 0px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    select::-ms-expand {
+        display: none;
+    }
+
+</style>
+</html>

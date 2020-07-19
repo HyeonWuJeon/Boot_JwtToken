@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/config :: configFragment">
+<body>
+<header th:replace="fragments/header :: headerFragment"></header>
+<br>
+<div class="col-md-12"></div>
+<div class="col-md-12"></div>
+<div class="col-md-12">
+    <div class="container">
+        <div>
+            <table class="table table-horizontal table-striped table-hover table-bordered">
+                <thead class="thead-strong">
+                <tr>
+                    <th>번호</th>
+                    <th>회원메일</th>
+                    <th>카테고리</th>
+                    <th>제목</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+
+                <tbody id="tbody">
+                <!--/*@thymesVar id="members" type="member"*/-->
+                <tr th:each="post : ${posts}">
+                    <td></td>
+                    <td><a th:href = "@{/member/post/answer/{id}(id = ${post.id})}" th:text="${post.member.email}"></a></td>
+                    <td th:text="${post.type}"></td>
+                    <td th:text="${post.title}"></td>
+                    <td th:text="${post.modifiedDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const table = document.getElementsByTagName('tbody')[0],
+        rows = table.getElementsByTagName('tr'),
+        text = 'textContent' in document ? 'textContent' : 'innerText';
+
+    let idx = 1+rows.length-rows.length;
+    for (let i = 0; i < rows.length; i++){
+        rows[i].children[0][text] = idx;
+        console.log("idx" + idx);
+        idx += 1;
+    }
+</script>
+<footer th:replace="fragments/footer :: footerFragment"></footer>
+</body>
+</html>

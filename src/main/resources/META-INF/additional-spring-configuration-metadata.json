@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "spring.security.enable-csrf",
+      "type": "java.lang.String",
+      "description": "Description for spring.security.enable-csrf."
+    },
+
+    {
+      "name": "spring.mail.peroperties.mail.smtp.port",
+      "type": "java.lang.String",
+      "description": "Description for spring.mail.peroperties.mail.smtp.port."
+    }
+  ] }
