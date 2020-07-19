@@ -43,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
@@ -65,6 +64,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .logoutRequestMatcher(new AntPathRequestMatcher("/all/logout"))
                 .logoutSuccessUrl("/")
                 .and()
+                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                           UsernamePasswordAuthenticationFilter.class)
+
                     .oauth2Login()
                         .userInfoEndpoint()
                             .userService(customOAuth2UserService);

@@ -25,6 +25,7 @@ public class PostController {
     @GetMapping("/member/post")
     public String Post(Model model, @LoginUser String user){
 
+        System.out.println("질문페이지"+ user);
         Member member = memberService.findMember(user);
         model.addAttribute("member", user);
         model.addAttribute("memberid", member);
