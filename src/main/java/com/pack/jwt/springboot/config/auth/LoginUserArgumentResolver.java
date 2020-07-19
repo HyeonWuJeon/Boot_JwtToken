@@ -34,11 +34,19 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     @Override
     public String resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("널확인해볼가?");
+        System.out.println(authentication.getPrincipal());
+
         try {
             if (!authentication.toString().contains("picture")) {
-                User user = (User) authentication.getPrincipal();
-                return memberService.findMember(user.getUsername()).getEmail();
+                System.out.println("널확인해볼가?if");
+//                User user = (User) authentication.getPrincipal();
+//                System.out.println(authentication);
+                return authentication.getPrincipal().toString();
+//                return memberService.findMember(user.getUsername()).getEmail(); //토큰저장할경우 아예여기서뜬다...
             } else {
+                System.out.println("널확인해볼가?else");
+                System.out.println(authentication);
                 SessionUser session = (SessionUser) httpSession.getAttribute("user");
                 return session.getEmail();
             }
