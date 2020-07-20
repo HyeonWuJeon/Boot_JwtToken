@@ -8,6 +8,7 @@ import com.pack.jwt.springboot.web.dto.MemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -46,6 +47,8 @@ public class MemberService implements UserDetailsService , AuthenticationManager
 
     @Transactional
     public int validateDuplicateMember(String user_email) {
+
+        System.out.println("왜안돼?");
         String value = user_email;
         value = value.substring(1, value.length() - 1);
         HashMap<String, String> hashMap = new HashMap<>();
@@ -80,8 +83,6 @@ public class MemberService implements UserDetailsService , AuthenticationManager
                 userEntityWrapper.getPassword(), Arrays.asList(authority));
         //검증을 위해 토큰을 Manager 인스턴스로 넘긴다.
         Authentication result = authenticate(request);
-        System.out.println("userDetails = " + userDetails);
-        System.out.println("result = " + result);
         //인증 성공시  컨텍스트에 담는 다.
         SecurityContextHolder.getContext().setAuthentication(result);
         return userDetails;
@@ -118,11 +119,17 @@ public class MemberService implements UserDetailsService , AuthenticationManager
 //          권한 추가
         AUTHORITIES.add(new SimpleGrantedAuthority(member.getRole().getKey()));
 
-//        if (auth.getName().equals(auth.getCredentials())) {
+        if (member.getPassword().equals(auth.getCredentials())) {
+            System.out.println("여기들어오니?");
+            System.out.println(member.getPassword());
+            System.out.println(auth.getCredentials());
+
             // 인증 성공시 인스턴스 리턴 하여 시큐리티 컨텍스트홀더에 추가한다.
 //            jwtTokenProvider.createToken(member.getUsername(), member.getRole().getKey());
             return new UsernamePasswordAuthenticationToken(auth.getName(),
                     auth.getCredentials(), AUTHORITIES);
-//        } throw new BadCredentialsException("Bad Credentials");
+        } else {
+            throw new BadCredentialsException("Bad Credentials");
+        }
     }
 }

@@ -16,8 +16,8 @@
                             <p sec:authorize="isAnonymous()">로그인후 서비스를 이용해주세요</p>
 
                             <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_GOOGLE')"  th:href="@{/member/post}" class="btn_1">질문 등록</a>
-                            &nbsp;&nbsp;
-                            <a th:if="${member.role.key.equals('ROLE_USER')}" th:href="@{/mypost/{id}(id=${member.id})}" class="btn_1">내 질문</a>
+                            &nbsp;&nbsp; <!--th:if="${member.role.key.equals('ROLE_USER')}" -->
+                            <a  sec:authorize="hasAnyRole('ROLE_USER','ROLE_GOOGLE')" th:href="@{/mypost/{id}(id=${member.id})}" class="btn_1">내 질문</a>
                             <a sec:authorize="hasRole('ROLE_ADMIN')"  th:href="@{/member/post/list}" class="btn_1">답변 달기</a>
                         </div>
                     </div>

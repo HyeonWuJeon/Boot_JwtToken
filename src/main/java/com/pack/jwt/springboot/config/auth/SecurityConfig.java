@@ -67,8 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .logoutRequestMatcher(new AntPathRequestMatcher("/all/logout"))
                 .logoutSuccessUrl("/")
                 .and()
-                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                           UsernamePasswordAuthenticationFilter.class)
+//                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+//                           UsernamePasswordAuthenticationFilter.class)
                     .oauth2Login()
                         .userInfoEndpoint()
                             .userService(customOAuth2UserService);
