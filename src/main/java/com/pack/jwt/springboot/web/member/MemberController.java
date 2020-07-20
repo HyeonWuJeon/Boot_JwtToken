@@ -50,7 +50,7 @@ public class MemberController {
         memberService.loadUserByUsername(member.getEmail());
 
         String tok = jwtTokenProvider.createToken(member.getEmail(), member.getRole().getKey());
-        System.out.println("토큰값"+ tok);
+//        System.out.println("토큰값"+ tok);
 //        System.out.println("인증정보 조회"+jwtTokenProvider.getAuthentication(tok).getAuthorities());
 //        System.out.println("사용자정보 조회"+jwtTokenProvider.getUserPk(tok));
 

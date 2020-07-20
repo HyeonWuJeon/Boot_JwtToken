@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class MemberService implements UserDetailsService , AuthenticationManager{
+public class MemberService implements UserDetailsService, AuthenticationManager {
 
     private final MemberRepository memberRepository;
 
@@ -119,17 +119,10 @@ public class MemberService implements UserDetailsService , AuthenticationManager
 //          권한 추가
         AUTHORITIES.add(new SimpleGrantedAuthority(member.getRole().getKey()));
 
-        if (member.getPassword().equals(auth.getCredentials())) {
-            System.out.println("여기들어오니?");
-            System.out.println(member.getPassword());
-            System.out.println(auth.getCredentials());
 
-            // 인증 성공시 인스턴스 리턴 하여 시큐리티 컨텍스트홀더에 추가한다.
+        // 인증 성공시 인스턴스 리턴 하여 시큐리티 컨텍스트홀더에 추가한다.
 //            jwtTokenProvider.createToken(member.getUsername(), member.getRole().getKey());
-            return new UsernamePasswordAuthenticationToken(auth.getName(),
-                    auth.getCredentials(), AUTHORITIES);
-        } else {
-            throw new BadCredentialsException("Bad Credentials");
-        }
+        return new UsernamePasswordAuthenticationToken(auth.getName(),
+                auth.getCredentials(), AUTHORITIES);
     }
 }
