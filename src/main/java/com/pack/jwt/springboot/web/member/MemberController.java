@@ -10,6 +10,7 @@ import com.pack.jwt.springboot.web.dto.MemberResponseDto;
 import com.pack.jwt.springboot.web.dto.MemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import java.util.List;
 @Slf4j
 public class MemberController {
 
+    private final FindByIndexNameSessionRepository sessionRepository;
     private final MemberService memberService;
 
 
@@ -37,20 +39,6 @@ public class MemberController {
 
         return "adminlogin";
     }
-//
-//    @PostMapping("/api/all/login")
-//    public String login(@Valid MemberForm form) {
-//
-//        Member member = memberService.findMember(form.getEmail()); //이메일 삽입완료
-//        memberService.loadUserByUsername(member.getEmail());
-//
-//        String tok = jwtTokenProvider.createToken(member.getEmail(), member.getRole().getKey());
-//        System.out.println("토큰값"+ tok);
-////        System.out.println("인증정보 조회"+jwtTokenProvider.getAuthentication(tok).getAuthorities());
-////        System.out.println("사용자정보 조회"+jwtTokenProvider.getUserPk(tok));
-//
-//        return "redirect:/";
-//    }
 
 
     @GetMapping("/signup")

@@ -52,10 +52,6 @@ public class IndexController {
             model.addAttribute("member", member);
         }
 
-        else{
-            model.addAttribute("member", user);
-        }
-
         return "home";
     }
 

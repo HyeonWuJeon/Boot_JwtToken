@@ -38,10 +38,9 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         try {
             if (!authentication.toString().contains("picture")) {
-//                User user = (User) authentication.getPrincipal();
-//                System.out.println(authentication);
-                return authentication.getPrincipal().toString();
-//                return memberService.findMember(user.getUsername()).getEmail(); //토큰저장할경우 아예여기서뜬다...
+                User user = (User) authentication.getPrincipal();
+//                return authentication.getPrincipal().toString(); //토큰저장시 db사용 x
+                return memberService.findMember(user.getUsername()).getEmail(); //토큰저장할경우 아예여기서뜬다...
             } else {
                 System.out.println(authentication);
                 SessionUser session = (SessionUser) httpSession.getAttribute("user");

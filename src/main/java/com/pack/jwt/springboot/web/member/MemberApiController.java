@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberApiController {
 
     private final MemberService memberService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+
 
     @PostMapping("/api/checkEmail")
     public int checkEmail(@RequestBody String email){
