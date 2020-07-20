@@ -24,6 +24,7 @@ public class MemberApiController {
 
     @PostMapping("/api/checkEmail")
     public int checkEmail(@RequestBody String email){
+        System.out.println("안들어오니????");
         return memberService.validateDuplicateMember(email);
     }
 

@@ -52,9 +52,9 @@ public class MemberController {
 //        return "redirect:/";
 //    }
 
+
     @GetMapping("/signup")
-    public String createMember(Model model , Principal principal) {
-        System.out.println("principal = " + principal.getName());
+    public String createMember(Model model) {
         model.addAttribute("memberForm", new MemberForm());
         return "signUp";
     }
@@ -64,8 +64,10 @@ public class MemberController {
     @PostMapping("/api/all/signup")
     public String MemberSignup (@Valid MemberForm form , BindingResult result){
         if (result.hasErrors()) {
+            System.out.println(" result 뭐지? " +result);
             return "signUp";
         }
+        System.out.println(" result 뭐지?error 밖 " +result);
         MemberSaveRequestDto member = new MemberSaveRequestDto();
 
         memberService.SignUp(member.builder()
