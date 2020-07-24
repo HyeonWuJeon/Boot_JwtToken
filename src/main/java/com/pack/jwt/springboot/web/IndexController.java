@@ -8,8 +8,6 @@ import com.pack.jwt.springboot.service.MailService;
 import com.pack.jwt.springboot.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,14 +47,14 @@ public class IndexController {
 
         if(user!=null){
             Member member = memberService.findMember(user);
+
+            System.out.println("member.getEmail() = " + member);
+            String tok  = jwtTokenProvider.createToken(member.getEmail(), member.getRole().getKey());
+            String who = jwtTokenProvider.getUserPk(tok);
+            System.out.println("who = " + who);
             model.addAttribute("member", member);
         }
 
         return "home";
     }
-
-
-
-
-
 }

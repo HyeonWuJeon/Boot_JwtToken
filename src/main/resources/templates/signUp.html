@@ -83,7 +83,7 @@
                 success: function (data) {
                     console.log("1 = 중복이다 / 0 = 중복아니다 : "+ data);
 
-                    if (data == 1) {
+                    if (data === 1) {
                         // 1 : 이메일이 중복되는 문구
                         $("#email_check").text("사용중인 이메일입니다. :p");
                         $("#email_check").css("color", "red");
@@ -124,7 +124,7 @@
                 $("#pwd_check").text("패스워드가 일치합니다. :) ");
                 $("#pwd_check").css("color", "blue");
             }
-            else if(pw2 == null){
+            else if(pw2 === null){
                 console.log("넑값 잡히니?")
             }
             else{

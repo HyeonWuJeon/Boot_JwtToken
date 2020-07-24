@@ -24,20 +24,24 @@ import java.util.Collections;
 @Slf4j
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
     private final HttpSession httpSession;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService delegate = new DefaultOAuth2UserService();
+        log.info("-------------------------loadUser------------------------");
+        log.info("delegate  : " +delegate);
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
-
+        log.info("userRequest : "+userRequest.getAccessToken());
+        log.info("Oauth2USer  : " +oAuth2User);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
+        log.info("구글로그인과정!");
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        log.info("attributes : " + attributes);
         Member member = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(member));
 

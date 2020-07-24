@@ -1,5 +1,6 @@
 package com.pack.jwt.springboot.service;
 
+import com.pack.jwt.springboot.config.JwtTokenProvider;
 import com.pack.jwt.springboot.domain.user.Member;
 import com.pack.jwt.springboot.domain.user.MemberRepository;
 import com.pack.jwt.springboot.domain.user.Role;
@@ -7,8 +8,8 @@ import com.pack.jwt.springboot.web.dto.MemberResponseDto;
 import com.pack.jwt.springboot.web.dto.MemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -32,9 +33,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class MemberService implements UserDetailsService , AuthenticationManager{
+public class MemberService implements UserDetailsService, AuthenticationManager {
 
     private final MemberRepository memberRepository;
+//    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public Long SignUp(MemberSaveRequestDto requestDto) {
@@ -48,14 +50,14 @@ public class MemberService implements UserDetailsService , AuthenticationManager
     @Transactional
     public int validateDuplicateMember(String user_email) {
 
-        System.out.println("왜안돼?");
         String value = user_email;
         value = value.substring(1, value.length() - 1);
         HashMap<String, String> hashMap = new HashMap<>();
         String[] entry = value.split(":");
         hashMap.put(entry[0].trim(), entry[1].trim());
         String value2 = hashMap.values().toString().substring(2, hashMap.values().toString().length() - 2);
-        Member findMember = memberRepository.findEmailCheck(value2);
+        Member findMember = memberRepository.findByEmail(value2)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + user_email));
         if (findMember != null) {
             return 1;
         } else {
@@ -69,7 +71,8 @@ public class MemberService implements UserDetailsService , AuthenticationManager
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         System.out.println("loadUserByUsername 시작");
-        Member userEntityWrapper = memberRepository.findEmailCheck(userEmail);
+        Member userEntityWrapper = memberRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + userEmail));
         if (userEntityWrapper == null) {
             throw new UsernameNotFoundException("User not authorized.");
         }
@@ -83,10 +86,12 @@ public class MemberService implements UserDetailsService , AuthenticationManager
                 userEntityWrapper.getPassword(), Arrays.asList(authority));
         //검증을 위해 토큰을 Manager 인스턴스로 넘긴다.
         Authentication result = authenticate(request);
-        //인증 성공시  컨텍스트에 담는 다.
+
+        //인증 성공시  컨텍스트에 담는다.
         SecurityContextHolder.getContext().setAuthentication(result);
         return userDetails;
     }
+
 
 
     @Transactional(readOnly = true)
@@ -96,7 +101,8 @@ public class MemberService implements UserDetailsService , AuthenticationManager
                     .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
             return member;
         } else {
-            Member member = memberRepository.findEmailCheck((String) id);
+            Member member = memberRepository.findByEmail((String) id)
+                    .orElseThrow(()-> new IllegalArgumentException("해당 회원이 없습니다. id = "+ id));
 
             return member;
         }
@@ -112,24 +118,21 @@ public class MemberService implements UserDetailsService , AuthenticationManager
     //해당부분이 없더라도스프링 시큐리티에서 구현해준다.
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
-        System.out.println("Authentication 인증 시작");
-        Member member = memberRepository.findEmailCheck(auth.getName());
+        log.debug("Authentication 인증 시작");
+        Member member = memberRepository.findByEmail(auth.getName())
+                        .orElseThrow(()->new IllegalArgumentException("존재하지 않는 회원입니다 = auth.getName()"+auth.getName()));
 
         List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
-//          권한 추가
+
+        //          권한 추가
         AUTHORITIES.add(new SimpleGrantedAuthority(member.getRole().getKey()));
 
-        if (member.getPassword().equals(auth.getCredentials())) {
-            System.out.println("여기들어오니?");
-            System.out.println(member.getPassword());
-            System.out.println(auth.getCredentials());
+        //토큰 발행
 
-            // 인증 성공시 인스턴스 리턴 하여 시큐리티 컨텍스트홀더에 추가한다.
-//            jwtTokenProvider.createToken(member.getUsername(), member.getRole().getKey());
-            return new UsernamePasswordAuthenticationToken(auth.getName(),
-                    auth.getCredentials(), AUTHORITIES);
-        } else {
-            throw new BadCredentialsException("Bad Credentials");
-        }
+//        jwtTokenProvider.createToken(member.getEmail(), member.getRole().getKey());
+
+        // 인증 성공시 인스턴스 리턴 하여 시큐리티 컨텍스트홀더에 추가한다.
+        return new UsernamePasswordAuthenticationToken(auth.getName(),
+                auth.getCredentials(), AUTHORITIES);
     }
 }

@@ -1,12 +1,8 @@
-package com.jojoldu.book.springboot.web.member;
+package com.pack.jwt.springboot.web.member;
 
-
-import com.pack.jwt.springboot.config.JwtTokenProvider;
-import com.pack.jwt.springboot.domain.user.MemberRepository;
 import com.pack.jwt.springboot.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

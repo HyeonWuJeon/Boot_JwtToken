@@ -1,5 +1,6 @@
 package com.pack.jwt.springboot.web;
 
+import com.pack.jwt.springboot.service.MemberService;
 import com.pack.jwt.springboot.service.PostsService;
 import com.pack.jwt.springboot.web.dto.PostsListResponseDto;
 import com.pack.jwt.springboot.web.dto.PostsResponseDto;
@@ -48,6 +49,9 @@ public class PostsApiController {
     public List<PostsListResponseDto> findAll() {
         return postsService.findAllDesc();
     }
+
+    private final MemberService memberService;
+
 
 
 }

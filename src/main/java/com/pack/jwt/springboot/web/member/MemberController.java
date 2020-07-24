@@ -8,6 +8,9 @@ import com.pack.jwt.springboot.domain.user.MemberRepository;
 import com.pack.jwt.springboot.service.MemberService;
 import com.pack.jwt.springboot.web.dto.MemberResponseDto;
 import com.pack.jwt.springboot.web.dto.MemberSaveRequestDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.session.FindByIndexNameSessionRepository;
@@ -26,11 +29,12 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@Getter
 public class MemberController {
 
-    private final FindByIndexNameSessionRepository sessionRepository;
-    private final MemberService memberService;
 
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/all/login")
     public String dispLogin(Model model, @LoginUser String email)
@@ -40,6 +44,21 @@ public class MemberController {
         return "adminlogin";
     }
 
+    @PostMapping("/api/all/login")
+    public String login(@Valid MemberForm form) {
+
+        Member member = memberService.findMember(form.getEmail()); //이메일 삽입완료
+        System.out.println("/api/all/login");
+        memberService.loadUserByUsername(member.getEmail());
+
+        String tok = jwtTokenProvider.createToken(member.getEmail(), member.getRole().getKey());
+
+//        System.out.println("토큰값"+ tok);
+//        System.out.println("인증정보 조회"+jwtTokenProvider.getAuthentication(tok).getAuthorities());
+//        System.out.println("사용자정보 조회"+jwtTokenProvider.getUserPk(tok));
+
+        return "redirect:/";
+    }
 
     @GetMapping("/signup")
     public String createMember(Model model) {
@@ -52,7 +71,6 @@ public class MemberController {
     @PostMapping("/api/all/signup")
     public String MemberSignup (@Valid MemberForm form , BindingResult result){
         if (result.hasErrors()) {
-            System.out.println(" result 뭐지? " +result);
             return "signUp";
         }
         System.out.println(" result 뭐지?error 밖 " +result);

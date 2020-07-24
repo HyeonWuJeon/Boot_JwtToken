@@ -4,6 +4,7 @@ import com.pack.jwt.springboot.config.JwtAuthenticationFilter;
 import com.pack.jwt.springboot.config.JwtTokenProvider;
 import com.pack.jwt.springboot.domain.user.Role;
 import com.pack.jwt.springboot.service.MemberService;
+import com.pack.jwt.springboot.web.member.MemberController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +24,17 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Slf4j
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberService memberService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberController memberController;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
@@ -54,9 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .formLogin()
                 .loginPage("/all/login")
-//                .loginProcessingUrl("/all/login")
-                .defaultSuccessUrl("/").permitAll()
-                .and()
+                .loginProcessingUrl("/all/login").and()
                 .logout()
                 .logoutSuccessUrl("/")
                 .and()
@@ -64,12 +66,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .logoutRequestMatcher(new AntPathRequestMatcher("/all/logout"))
                 .logoutSuccessUrl("/")
                 .and()
-//                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-//                           UsernamePasswordAuthenticationFilter.class)
-
-                    .oauth2Login()
-                        .userInfoEndpoint()
-                            .userService(customOAuth2UserService);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
 
     }
 
