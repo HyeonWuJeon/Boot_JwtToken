@@ -4,7 +4,6 @@ import com.pack.jwt.springboot.config.JwtTokenProvider;
 import com.pack.jwt.springboot.config.auth.LoginUser;
 import com.pack.jwt.springboot.domain.user.Member;
 import com.pack.jwt.springboot.domain.user.MemberForm;
-import com.pack.jwt.springboot.domain.user.MemberRepository;
 import com.pack.jwt.springboot.service.MemberService;
 import com.pack.jwt.springboot.web.dto.MemberResponseDto;
 import com.pack.jwt.springboot.web.dto.MemberSaveRequestDto;
@@ -16,9 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,9 +26,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final HttpSession httpSession;
-    private final MemberRepository memberRepository;
-    MemberSaveRequestDto memberSaveRequestDto = new MemberSaveRequestDto();
 
 
     @GetMapping("/all/login")
@@ -42,6 +36,7 @@ public class MemberController {
         return "adminlogin";
     }
 //
+
     @PostMapping("/api/all/login")
     public String login(@Valid MemberForm form) {
 
@@ -54,8 +49,21 @@ public class MemberController {
 //        System.out.println("인증정보 조회"+jwtTokenProvider.getAuthentication(tok).getAuthorities());
 //        System.out.println("사용자정보 조회"+jwtTokenProvider.getUserPk(tok));
 
+//    @PostMapping("/api/all/login")
+//    public String login(@Valid MemberForm form) {
+//
+//        Member member = memberService.findMember(form.getEmail()); //이메일 삽입완료
+//        memberService.loadUserByUsername(member.getEmail());
+//
+//        String tok = jwtTokenProvider.createToken(member.getEmail(), member.getRole().getKey());
+//        System.out.println("토큰값"+ tok);
+////        System.out.println("인증정보 조회"+jwtTokenProvider.getAuthentication(tok).getAuthorities());
+////        System.out.println("사용자정보 조회"+jwtTokenProvider.getUserPk(tok));
+//
         return "redirect:/";
     }
+
+
 
     @GetMapping("/signup")
     public String createMember(Model model) {
