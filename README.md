@@ -38,4 +38,5 @@
 ### Reference
 
 https://docs.spring.io/spring-security/site/docs/5.2.2.RELEASE/reference/html5/
+
 https://docs.spring.io/spring-security-oauth2-boot/docs/2.2.4.RELEASE/reference/html5/
